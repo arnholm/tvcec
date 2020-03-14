@@ -139,7 +139,7 @@ int main(int argc, char **argv)
       if(server.read_message(udp_cmd)) {
 
          // UDP message received
-         if(verbose) cout << endl << " udp "<< (++msg_count) << ": " << udp_cmd  << std::flush;
+         if(verbose) cout << endl << " udp "<< (++msg_count) << ": " << udp_cmd  << std::endl;
 
          // special "exit" command terminates server loop
          if(udp_cmd =="exit") return 0;
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
          if(config.parse(udp_cmd,cec_cmd)) {
             // udp message successfully parsed
 
-            std::string system_cmd = "echo \"" + cec_cmd.ToStdString() + "\" | cec-client -s -d -1";
+            std::string system_cmd = "echo \"" + cec_cmd.ToStdString() + "\" | cec-client -s -d 1";
             if(verbose) cout << " ==> " << system_cmd << std::flush;
 
             // issue the command to control the TV
