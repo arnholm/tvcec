@@ -21,5 +21,7 @@ void udp_server::run()
          // message received, put it on the queue
          m_msg_queue->enqueue(udp_cmd);
       }
+
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
    }
 }

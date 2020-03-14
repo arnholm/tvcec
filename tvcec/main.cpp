@@ -156,56 +156,17 @@ int main(int argc, char **argv)
          }
       }
 
-      // process the message
-      if(verbose) cout << endl << " udp "<< (++msg_count) << ": " << udp_message  << std::endl;
+      if(udp_message.length() > 0) {
 
-
-      wxString cec_cmd;
-      if(config.parse(udp_message,cec_cmd)) {
-         // udp message successfully parsed
-
-         std::string system_cmd = "echo \"" + cec_cmd.ToStdString() + "\" | cec-client -s -d 1";
-         if(verbose) cout << " ==> " << system_cmd << std::endl;
-
-         // issue the command to control the TV
-         if(!debug){
-
-            // receive the return value to avoid warning, even though the value cannot be trusted
-            int retval = system(system_cmd.c_str());
-         }
-
-      }
-
-   }
-
-   server->stop();
-   udp_threads[0]->join();
-
-
-/*
- //  udp_reader server(port,buffer_size);
-
-   size_t msg_count = 0;
-
-   bool read_udp = true;
-   while(read_udp) {
-
-      // read next message
-      std::string udp_cmd;
-      if(server.read_message(udp_cmd)) {
-
-         // UDP message received
-         if(verbose) cout << endl << " udp "<< (++msg_count) << ": " << udp_cmd  << std::endl;
-
-         // special "exit" command terminates server loop
-         if(udp_cmd =="exit") return 0;
+         // process the message
+         if(verbose) cout << endl << " udp "<< msg_count << ": " << udp_message  << std::flush;
 
          wxString cec_cmd;
-         if(config.parse(udp_cmd,cec_cmd)) {
+         if(config.parse(udp_message,cec_cmd)) {
             // udp message successfully parsed
 
             std::string system_cmd = "echo \"" + cec_cmd.ToStdString() + "\" | cec-client -s -d 1";
-            if(verbose) cout << " ==> " << system_cmd << std::flush;
+            if(verbose) cout << " ==> " << system_cmd << std::endl;
 
             // issue the command to control the TV
             if(!debug){
@@ -214,9 +175,19 @@ int main(int argc, char **argv)
                int retval = system(system_cmd.c_str());
             }
          }
+         else {
+            if(verbose) cout << " ==> Error, not understood" << std::endl;
+         }
       }
+      else {
+         std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      }
+
    }
-*/
+
+   server->stop();
+   udp_threads[0]->join();
+
    return 0;
 }
 

@@ -11,7 +11,8 @@ udp_reader::udp_reader(size_t port,  size_t buffer_size, const int timeout_ms )
 
 
    // set milliseconds timeout on the UDP socket
-   m_socket->set_option(boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO>{ timeout_ms });
+   // This does not work under Raspian, it throws an exception
+  //  m_socket->set_option(boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO>{ timeout_ms });
 }
 
 udp_reader::~udp_reader()
