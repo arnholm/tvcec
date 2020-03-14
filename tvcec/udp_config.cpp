@@ -3,7 +3,7 @@
 #include <wx/tokenzr.h>
 
 udp_config::udp_config()
-: m_conf(std::make_shared<wxConfig>(wxT("rpicec"),wxT("rpicec")))
+: m_conf(std::make_shared<wxConfig>(wxT("tvcec"),wxT("tvcec")))
 {
    read_config();
 }

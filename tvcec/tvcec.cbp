@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="rpi-cec" />
+		<Option title="tvcec" />
 		<Option pch_mode="2" />
 		<Option compiler="msvc" />
 		<Build>
 			<Target title="MSVC_Debug">
-				<Option output=".cmp/msvc/bin/Debug/rpi-cecd" prefix_auto="1" extension_auto="1" />
+				<Option output=".cmp/msvc/bin/Debug/tvcecd" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".cmp/msvc/obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="msvc" />
@@ -34,7 +34,7 @@
 				</Linker>
 			</Target>
 			<Target title="MSVC_Release">
-				<Option output=".cmp/msvc/bin/Release/rpi-cec" prefix_auto="1" extension_auto="1" />
+				<Option output=".cmp/msvc/bin/Release/tvcec" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".cmp/msvc/obj/Release/" />
 				<Option type="1" />
 				<Option compiler="msvc" />
@@ -59,7 +59,7 @@
 				</Linker>
 			</Target>
 			<Target title="GCC_Debug">
-				<Option output=".cmp/gcc/bin/Debug/rpi-cecd" prefix_auto="1" extension_auto="1" />
+				<Option output=".cmp/gcc/bin/Debug/tvcecd" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".cmp/gcc/obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc_generic" />
@@ -83,7 +83,7 @@
 				</Linker>
 			</Target>
 			<Target title="GCC_Release">
-				<Option output=".cmp/gcc/bin/Release/rpi-cec" prefix_auto="1" extension_auto="1" />
+				<Option output=".cmp/gcc/bin/Release/tvcec" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".cmp/gcc/obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc_generic" />

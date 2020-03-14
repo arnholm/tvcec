@@ -112,7 +112,7 @@ int main(int argc, char **argv)
    }
 
    if(verbose) {
-      cout << "rpi-cec listening to UDP port " << port << endl;
+      cout << "tvcec listening to UDP port " << port << endl;
    }
 
    // read config file
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
    // force default config if requested
    if(create_config) {
       config.create_config();
-       if(verbose) cout << "rpi-cec created new configuration. "<< endl;
+       if(verbose) cout << "tvcec created new configuration. "<< endl;
    }
 
    // our udp server

@@ -1,17 +1,17 @@
-# rpi-cec
-Control TV from Raspberry PI, assuming you are using a TV with 2 HDMI input sources and *not* using an antenna connection. For example
+# tvcec
+Control TV using HDMI-CEC from Raspberry PI.  For example, assuming you are using a TV with 2 HDMI input sources and *not* using an antenna connection.
 
     HDMI 1 = Chromecast
     HDMI 2 = Raspberry PI
 
-The idea with rpi-cec is to run as a UDP server and receive messages for controlling the TV via HDMI. This is achieved by issuing commands to the TV via the *cec-client* application that must be installed on the PI:
+The idea with tvcec is to run as a UDP server and receive messages for controlling the TV via HDMI. This is achieved by issuing commands to the TV via the *cec-client* application that must be installed on the PI:
 
     sudo apt install cec-utils
 
-## rpi-cec messages
+## tvcec messages
 
 
-| TV Function     | rpi-cec UDP message   | cec-client command     |
+| TV Function     | tvcec UDP message   | cec-client command     |
 | :---            | :--------------       | :--------------------- |
 | on              | cec-on {addr}         | on {addr}              |
 | standby         | cec-standby {addr}    | standby {addr}         |
