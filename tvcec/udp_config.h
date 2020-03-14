@@ -2,7 +2,6 @@
 #define UDP_CONFIG_H
 
 #include <map>
-#include <memory>
 #include <wx/config.h>
 #include <wx/string.h>
 
@@ -24,8 +23,8 @@ public:
    bool parse(const wxString& udp_cmd, wxString& cec_cmd);
 
 private:
-   udp_map                    m_map;
-   std::shared_ptr<wxConfig>  m_conf;
+   udp_map    m_map;
+   wxConfig*  m_conf;
 };
 
 #endif // UDP_CONFIG_H

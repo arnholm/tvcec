@@ -34,12 +34,12 @@ typedef map<wxString,wxString> CmdLineMap;    // CmdLineMap
 static const wxCmdLineEntryDesc cmdLineDesc[] =
 {
   //   kind            shortName     longName          description                                     parameterType          flag(s)
-  { wxCMD_LINE_SWITCH, wxT_2("h"),   wxT_2("help"),    wxT_2("command line parameter help"),           wxCMD_LINE_VAL_NONE,   wxCMD_LINE_OPTION_HELP },
-  { wxCMD_LINE_OPTION, wxT_2("p"),   wxT_2("port"),    wxT_2("UDP port (default=7666)"),               wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
-  { wxCMD_LINE_SWITCH, wxT_2("c"),   wxT_2("config"),  wxT_2("(re-)create default configuration"),     wxCMD_LINE_VAL_NONE,   wxCMD_LINE_PARAM_OPTIONAL  },
-  { wxCMD_LINE_SWITCH, wxT_2("v"),   wxT_2("verbose"), wxT_2("echo messages to terminal"),             wxCMD_LINE_VAL_NONE,   wxCMD_LINE_PARAM_OPTIONAL  },
-  { wxCMD_LINE_SWITCH, wxT_2("d"),   wxT_2("debug"),   wxT_2("debug only, do not invoke cec-client"),  wxCMD_LINE_VAL_NONE,   wxCMD_LINE_PARAM_OPTIONAL  },
-  { wxCMD_LINE_NONE,   wxT_2(""),    wxT_2(""),        wxT_2(""),                                      wxCMD_LINE_VAL_NONE,   wxCMD_LINE_PARAM_OPTIONAL  }
+  { wxCMD_LINE_SWITCH, wxT_2("help"),    wxT_2("help"),    wxT_2("command line parameter help"),           wxCMD_LINE_VAL_NONE,   wxCMD_LINE_OPTION_HELP },
+  { wxCMD_LINE_OPTION, wxT_2("port"),    wxT_2("port"),    wxT_2("UDP port (default=7666)"),               wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
+  { wxCMD_LINE_SWITCH, wxT_2("config"),  wxT_2("config"),  wxT_2("(re-)create default configuration"),     wxCMD_LINE_VAL_NONE,   wxCMD_LINE_PARAM_OPTIONAL  },
+  { wxCMD_LINE_SWITCH, wxT_2("verbose"), wxT_2("verbose"), wxT_2("echo messages to terminal"),             wxCMD_LINE_VAL_NONE,   wxCMD_LINE_PARAM_OPTIONAL  },
+  { wxCMD_LINE_SWITCH, wxT_2("debug"),   wxT_2("debug"),   wxT_2("debug only, do not invoke cec-client"),  wxCMD_LINE_VAL_NONE,   wxCMD_LINE_PARAM_OPTIONAL  },
+  { wxCMD_LINE_NONE,   wxT_2(""),        wxT_2(""),        wxT_2(""),                                      wxCMD_LINE_VAL_NONE,   wxCMD_LINE_PARAM_OPTIONAL  }
 };
 
 
@@ -80,6 +80,7 @@ int main(int argc, char **argv)
 
    // parse command line
    wxCmdLineParser parser(cmdLineDesc);
+   parser.DisableLongOptions();
    parser.SetSwitchChars(wxT("-"));
    parser.SetCmdLine(argc,argv);
    if(parser.Parse() != 0) {
@@ -121,7 +122,8 @@ int main(int argc, char **argv)
    // force default config if requested
    if(create_config) {
       config.create_config();
-       if(verbose) cout << "tvcec created new configuration. "<< endl;
+      if(verbose) cout << "tvcec created new configuration. "<< endl;
+      return 0;
    }
 
    // our udp server

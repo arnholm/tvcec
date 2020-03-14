@@ -3,23 +3,24 @@
 #include <wx/tokenzr.h>
 
 udp_config::udp_config()
-: m_conf(std::make_shared<wxConfig>(wxT("tvcec"),wxT("tvcec")))
+: m_conf(new wxConfig(wxT("tvcec"),wxT("tvcec")))
 {
    read_config();
 }
 
 udp_config::~udp_config()
-{}
+{
+   delete m_conf;
+}
 
 // read configuration
 size_t udp_config::read_config()
 {
    m_map.clear();
+   m_conf->SetPath("/cec");
 
    size_t ncmd = m_conf->GetNumberOfEntries();
    if(ncmd == 0) ncmd = create_config();
-
-   m_conf->SetPath("/cec");
 
    // first enumerate all entries
    wxString name;
@@ -37,6 +38,8 @@ size_t udp_config::read_config()
       m_conf->Read(name,&value,"");
       m_map[name] = value;
    }
+
+   return m_map.size();
 }
 
 // generate default configuratiuon
@@ -50,6 +53,9 @@ size_t udp_config::create_config()
    m_conf->Write("cec-voldown","voldown");
    m_conf->Write("cec-mute","mute");
    m_conf->Write("cec-hdmi","txn 4f:82:%s0:00");
+
+   // save the created configuration immediately
+   m_conf->Flush();
 
    return m_conf->GetNumberOfEntries();
 }
