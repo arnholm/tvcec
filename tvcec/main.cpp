@@ -10,6 +10,7 @@ using namespace std;
 #include <wx/cmdline.h>  // command line parser
 
 #include "udp_config.h"
+#include "udp_reader.h"
 #include "udp_server.h"
 
 #include <map>
@@ -126,8 +127,63 @@ int main(int argc, char **argv)
       return 0;
    }
 
-   // our udp server
-   udp_server server(port,buffer_size);
+   // start the UDP server thread
+
+   std::shared_ptr<udp_reader> reader = std::make_shared<udp_reader>(port,buffer_size);
+   std::shared_ptr<udp_server> server = std::make_shared<udp_server>(reader);
+   std::vector<std::shared_ptr<std::thread>> udp_threads;
+   udp_threads.push_back(std::make_shared<std::thread>(&udp_server::run,server));
+
+   // the UDP message queue
+   auto msg_queue = server->queue();
+
+   size_t msg_count = 0;
+
+   bool read_udp = true;
+   while(read_udp) {
+
+      // empty the queue, get the last message only
+      std::string udp_message, try_message;
+      while(msg_queue->try_dequeue(try_message)) {
+         msg_count++;
+         udp_message = try_message;
+
+         // special "exit" command terminates server loop
+         if(udp_message =="exit") {
+            server->stop();
+            udp_threads[0]->join();
+            exit(0);
+         }
+      }
+
+      // process the message
+      if(verbose) cout << endl << " udp "<< (++msg_count) << ": " << udp_message  << std::endl;
+
+
+      wxString cec_cmd;
+      if(config.parse(udp_message,cec_cmd)) {
+         // udp message successfully parsed
+
+         std::string system_cmd = "echo \"" + cec_cmd.ToStdString() + "\" | cec-client -s -d 1";
+         if(verbose) cout << " ==> " << system_cmd << std::endl;
+
+         // issue the command to control the TV
+         if(!debug){
+
+            // receive the return value to avoid warning, even though the value cannot be trusted
+            int retval = system(system_cmd.c_str());
+         }
+
+      }
+
+   }
+
+   server->stop();
+   udp_threads[0]->join();
+
+
+/*
+ //  udp_reader server(port,buffer_size);
 
    size_t msg_count = 0;
 
@@ -160,7 +216,7 @@ int main(int argc, char **argv)
          }
       }
    }
-
+*/
    return 0;
 }
 

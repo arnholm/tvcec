@@ -1,39 +1,25 @@
 #include "udp_server.h"
 
-udp_server::udp_server(size_t port,  size_t buffer_size)
-: m_port(port)
-, m_buffer_size(buffer_size)
-{
-   // we need the "io_service" when creating the socket
-   // create and open socket at designated port
-   unsigned short uport =  static_cast<unsigned short>(m_port);
-   m_socket = std::make_shared<boost_socket>(m_io_service, boost_endpoint(boost_udp::v4(),uport));
-}
+udp_server::udp_server(std::shared_ptr<udp_reader> udp_reader)
+: m_udp_reader(udp_reader)
+, m_msg_queue(std::make_shared<safe_queue<std::string>>())
+{}
 
 udp_server::~udp_server()
 {}
 
-bool udp_server::read_message(std::string& message)
+void udp_server::run()
 {
-   // receive buffer
-   std::vector<char> recv_buf(m_buffer_size);
+   while(!stop_requested()) {
 
-   // the sender endpoint can be anything
-   boost_endpoint  sender_endpoint;
-   boost::system::error_code error;
+      // read UDP message from socket, or time out if nothing received
+      // typically the timeout is 1 sec (depends on setting in udp_reader)
 
-   // blocking read
-   size_t received_length = m_socket->receive_from( boost::asio::buffer(recv_buf), sender_endpoint,0,error);
-   if(received_length > 0) {
+      std::string udp_cmd;
+      if(m_udp_reader->read_message(udp_cmd)) {
 
-      // truncate the buffer to actual received size
-      recv_buf.resize(received_length);
-
-      // turn it into a string and assign to output variable
-      message = std::string(recv_buf.begin(),recv_buf.end());
-      return true;
+         // message received, put it on the queue
+         m_msg_queue->enqueue(udp_cmd);
+      }
    }
-
-   // if we end up here, something failed
-   return false;
 }

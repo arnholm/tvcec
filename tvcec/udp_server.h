@@ -1,33 +1,25 @@
 #ifndef UDP_SERVER_H
 #define UDP_SERVER_H
 
+#include "stoppable_thread.h"
+#include "udp_reader.h"
+#include "safe_queue.h"
+#include <memory>
+#include <string>
 
-#include <boost/asio.hpp>
-
-typedef boost::asio::ip::udp             boost_udp;
-typedef boost::asio::ip::udp::endpoint   boost_endpoint;
-typedef boost::asio::ip::udp::socket     boost_socket;
-typedef boost::asio::io_service          boost_io_service;
-
-
-class udp_server {
+class udp_server : public stoppable_thread {
 public:
-   udp_server(size_t port,  size_t buffer_size = 1024);
+   udp_server(std::shared_ptr<udp_reader> udp_reader);
    virtual ~udp_server();
 
-   // check if communication socket is open
-   bool is_open() const { return m_socket->is_open(); }
+   void run();
 
-   // read next UDP message, this hangs until data is received
-   bool read_message(std::string& message);
+   // return access to the message queue
+   std::shared_ptr<safe_queue<std::string>> queue() const { return m_msg_queue; }
 
 private:
-
-   size_t                        m_port;         // UDP port on the receiving end
-   size_t                        m_buffer_size;  // max message size in bytes
-
-   boost_io_service              m_io_service;   // must exist with same lifetime as m_socket
-   std::shared_ptr<boost_socket> m_socket;       // the socket we read UDP messages from
+   std::shared_ptr<udp_reader>               m_udp_reader;  // udp reader
+   std::shared_ptr<safe_queue<std::string>>  m_msg_queue;   // UDP messages end up here
 };
 
 #endif // UDP_SERVER_H

@@ -120,8 +120,13 @@
 			<Add directory="$(#boost.lib)" />
 		</Linker>
 		<Unit filename="main.cpp" />
+		<Unit filename="safe_queue.h" />
+		<Unit filename="stoppable_thread.cpp" />
+		<Unit filename="stoppable_thread.h" />
 		<Unit filename="udp_config.cpp" />
 		<Unit filename="udp_config.h" />
+		<Unit filename="udp_reader.cpp" />
+		<Unit filename="udp_reader.h" />
 		<Unit filename="udp_server.cpp" />
 		<Unit filename="udp_server.h" />
 		<Extensions>
